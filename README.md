@@ -12,9 +12,9 @@ Submitted to: Miss Hijaab Sikander
 ## Features
 - Board sizes from 4x4 to 8x8
 - Default target of 2048 or a custom target (power of two, at least 4)
-- Easy (no time limit), Medium (15 min), Hard (10 min)
+- Easy (no time limit), Medium (1000 moves), Hard (900 moves)
 - Arrow-key controls
-- Score, highest score, move counter and countdown timer
+- Score, highest score, and move counter 
 - Post-game menu: New Game, Restart, Exit
 
 ## Requirements

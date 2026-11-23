@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <conio.h>
 #include <stdlib.h>
@@ -26,6 +27,11 @@ int boardChanged(int (*game)[8], int oldGame[8][8], int size);
 void difficulty(struct Game *g);
 void updateHighest(struct Game *g);
 
+// File Handling Functions
+void loadHighest(struct Game *g);
+void saveHighest(struct Game *g);
+void saveHistory(struct Game *g);
+
 void gotoxy(int x, int y) {
     CONSOLE_CURSOR_INFO cursor;
     cursor.dwSize = 1;
@@ -50,6 +56,9 @@ int main() {
     struct Game g;
 
     g.highestScore = 0;
+
+    // Load Previous Highest Score
+    loadHighest(&g);
 
     srand(time(NULL));
 
@@ -134,6 +143,7 @@ int main() {
                         end = 3;
                         break;
                     }
+
                     if(ch == 0 || ch == 224) {
                         ch = getch();
 
@@ -169,6 +179,8 @@ int main() {
                     }
                 }
 
+                display(game,&g);
+
                 // Check Win or Game Over
                 if(end == 0) {
                     end = checkgameover(game,g.size,g.target);
@@ -187,6 +199,10 @@ int main() {
             else if(end == 3) {
                 printf("\nGAME PAUSED!");
             }
+
+            // Save Game History and Highest Score
+            saveHistory(&g);
+            saveHighest(&g);
 
             // Game Menu
             printf("\n\n1. New Game\n");
@@ -235,12 +251,51 @@ void difficulty(struct Game *g) {
     }
 }
 
+// Load Highest Score
+void loadHighest(struct Game *g) {
+    FILE *fp;
+
+    fp = fopen("highest.txt", "r");
+
+    if(fp != NULL) {
+        fscanf(fp, "%d", &g->highestScore);
+        fclose(fp);
+    }
+}
+
+// Save Highest Score
+void saveHighest(struct Game *g) {
+    FILE *fp;
+
+    fp = fopen("highest.txt", "w");
+
+    if(fp != NULL) {
+        fprintf(fp, "%d", g->highestScore);
+        fclose(fp);
+    }
+}
+
+// Save Game History
+void saveHistory(struct Game *g) {
+    FILE *fp;
+
+    fp = fopen("history.txt", "a");
+
+    if(fp != NULL) {
+        fprintf(fp, "Score: %d | Moves: %d\n",
+                g->score, g->moves);
+
+        fclose(fp);
+    }
+}
+
 // Update Highest Function
 void updateHighest(struct Game *g) {
     g->moves++;
 
     if(g->score > g->highestScore) {
         g->highestScore = g->score;
+        saveHighest(g);
     }
 }
 
@@ -348,9 +403,11 @@ void moveup(int (*game)[8], int size, int *score) {
                         }
                     }
                 }
+
                 if(i-n == 0) {
                     break;
                 }
+
                 n++;
                 m++;
             }
@@ -388,9 +445,11 @@ void movedown(int (*game)[8], int size, int *score) {
                         }
                     }
                 }
+
                 if(i+n == size-1) {
                     break;
                 }
+
                 n++;
                 m++;
             }
@@ -406,6 +465,7 @@ void moveright(int (*game)[8], int size, int *score) {
 
     for(int i=0; i<size; i++) {
         f = 0;
+
         for(int j=size-2; j>=0; j--) {
             n = 1;
             m = 0;
@@ -427,9 +487,11 @@ void moveright(int (*game)[8], int size, int *score) {
                         }
                     }
                 }
+
                 if(j+n == size-1) {
                     break;
                 }
+
                 n++;
                 m++;
             }
@@ -445,6 +507,7 @@ void moveleft(int (*game)[8], int size, int *score) {
 
     for(int i=0; i<size; i++) {
         f = 0;
+
         for(int j=1; j<=size-1; j++) {
             n = 1;
             m = 0;
@@ -466,6 +529,7 @@ void moveleft(int (*game)[8], int size, int *score) {
                         }
                     }
                 }
+
                 if(j-n == 0) {
                     break;
                 }
@@ -495,6 +559,7 @@ int boardChanged(int (*game)[8], int oldGame[8][8], int size) {
             }
         }
     }
+
     return 0;
 }
 

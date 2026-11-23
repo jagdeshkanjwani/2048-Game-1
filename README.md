@@ -37,3 +37,10 @@ Choose a board size, target and difficulty, then use the arrow keys to slide til
 - Save high scores to a file
 - Graphical interface, colors and sound
 - Better input validation
+## Cases
+Easy level
+<img width="960" height="504" alt="image" src="https://github.com/user-attachments/assets/05fcb666-dcdb-4dcf-8f82-2faaef613490" />
+Medium level
+<img width="960" height="504" alt="image" src="https://github.com/user-attachments/assets/f94cadd8-af00-4b30-a746-a30c4d5088d8" />
+Hard level 
+<img width="960" height="504" alt="image" src="https://github.com/user-attachments/assets/91e5332f-a532-4e12-99f5-b81d96aa6053" />
